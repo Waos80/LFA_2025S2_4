@@ -1,7 +1,7 @@
 from automata import AFD
 from analisis import Lexico
 from operaciones import *
-
+import os
 import tkinter as tk
 from tkinter import filedialog, messagebox
 
@@ -125,6 +125,19 @@ def guardar_como() -> None:
         global ruta_archivo
         ruta_archivo = nueva_ruta
 
+def manuales() -> None:
+    try:
+        os.startfile("Manual Técnico y de Usuario - Proyecto 2 LFYA.pdf")
+    except Exception as e:
+        messagebox.showerror("Error", f"No se pudo abrir el PDF:\n{e}")
+
+def ayuda() -> None:
+    global ruta_archivo
+    ruta_archivo = "Datos.txt"
+    with open(ruta_archivo, "r", encoding="utf-8") as f:
+            contenido = f.read()
+            texto.delete("1.0", tk.END)
+            texto.insert(tk.END, contenido)
 
 def analizar():
     global ruta_archivo
@@ -234,52 +247,56 @@ def analizar():
 
 if __name__ == "__main__":
 
-
     # Crear ventana principal
     ventana = tk.Tk()
     ventana.title("Editor de Archivos")
     ventana.geometry("943x630")
     ventana.resizable(False, False)
+    ventana.configure(bg = "#ADADAD")
 
     # Variable para guardar la ruta del archivo actual
     ruta_archivo = None
 
     # Frame superior con botones principales
     frame_superior = tk.Frame(ventana)
+    frame_superior.configure(bg = "#ADADAD")
     frame_superior.pack(side="top", fill="x", padx=15, pady=5)
 
-    btn_Open = tk.Button(frame_superior, text="Abrir", command=abrir_archivo, height = 3, width = 20, font = ("Arial", 10, "bold"))
+    btn_Open = tk.Button(frame_superior, text="Abrir", command=abrir_archivo, height = 3, width = 20, font = ("Comic Sans MS", 10), bg = "#BDBDBD", activebackground = "#969696", relief = "ridge", bd = 6)
     btn_Open.pack(side="left", padx=4)
 
-    btn_Save = tk.Button(frame_superior, text="Guardar", command=guardar_archivo, height = 3, width = 20, font = ("Arial", 10, "bold"))
+    btn_Save = tk.Button(frame_superior, text="Guardar", command=guardar_archivo, height = 3, width = 20, font = ("Comic Sans MS", 10), bg = "#BDBDBD", activebackground = "#969696", relief = "ridge", bd = 6)
     btn_Save.pack(side="left", padx=4)
 
-    btn_SaveAs = tk.Button(frame_superior, text="Guardar Como", command=guardar_como, height = 3, width = 20, font = ("Arial", 10, "bold"))
+    btn_SaveAs = tk.Button(frame_superior, text="Guardar Como", command=guardar_como, height = 3, width = 20, font = ("Comic Sans MS", 10), bg = "#BDBDBD", activebackground = "#969696", relief = "ridge", bd = 6)
     btn_SaveAs.pack(side="left", padx=4)
 
-    btn_Analyze = tk.Button(frame_superior, text="Analizar", command = analizar, height = 3, width = 20, font = ("Arial", 10, "bold"))
+    btn_Analyze = tk.Button(frame_superior, text="Analizar", command = analizar, height = 3, width = 20, font = ("Comic Sans MS", 10), bg = "#BDBDBD", activebackground = "#969696", relief = "ridge", bd = 6)
     btn_Analyze.pack(side="left", padx=4)
 
     # Área de texto editable
     frame_texto = tk.Frame(ventana)
+    frame_texto.configure(bg = "#ADADAD")
     frame_texto.pack(side = "left", padx= 10, pady= 10)
     scroll_vertical = tk.Scrollbar(frame_texto)
     scroll_vertical.pack(side= "right", fill= "y")
-    texto = tk.Text(frame_texto, wrap= "word", font= ("Arial", 12), height= 30, width= 79, yscrollcommand= scroll_vertical.set)
+    texto = tk.Text(frame_texto, wrap= "word", font= ("Arial", 12), height= 30, width= 81, yscrollcommand= scroll_vertical.set, fg = "#000000")
     texto.pack(side = "left")
+    texto.configure(bg = "#F2F2F2")
     scroll_vertical.config(command = texto.yview)
 
     # Frame lateral derecho con botones sin funcionalidad por ahora
     frame_lateral = tk.Frame(ventana)
+    frame_lateral.configure(bg = "#ADADAD")
     frame_lateral.pack(side="right", fill="y", padx=10, pady=10)
 
-    btn_UserManual = tk.Button(frame_lateral, text="Manual de Usuario", height = 3, width = 20, font = ("Arial", 10, "bold"))
+    btn_UserManual = tk.Button(frame_lateral, text="Manual de Usuario", command = manuales, height = 3, width = 20, font = ("Comic Sans MS", 10), bg = "#BDBDBD", activebackground = "#969696", relief = "ridge", bd = 6)
     btn_UserManual.pack(pady = 5)
 
-    btn_TecnicManual = tk.Button(frame_lateral, text="Manual Técnico", height = 3, width = 20, font = ("Arial", 10, "bold"))
+    btn_TecnicManual = tk.Button(frame_lateral, text="Manual Técnico", command = manuales, height = 3, width = 20, font = ("Comic Sans MS", 10), bg = "#BDBDBD", activebackground = "#969696", relief = "ridge", bd = 6)
     btn_TecnicManual.pack(pady = 5)
 
-    btn_Help = tk.Button(frame_lateral, text="Ayuda", height = 3, width = 20, font = ("Arial", 10, "bold"))
+    btn_Help = tk.Button(frame_lateral, text="Ayuda", command = ayuda, height = 3, width = 20, font = ("Comic Sans MS", 10), bg = "#BDBDBD", activebackground = "#969696", relief = "ridge", bd = 6)
     btn_Help.pack(pady = 5)
 
     # Ejecutar la interfaz
