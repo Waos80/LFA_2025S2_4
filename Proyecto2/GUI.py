@@ -44,7 +44,7 @@ def generar_diagramas(html_path):
         dot = Digraph(comment=f'Operacion {i}')
         dibujar_arbol_ast(ast_root, dot)
         dot.render(f'arbol_operacion_{i}', format='png', cleanup=True)
-        print(f'✅ Árbol generado para Operación {i}: {expr}')
+        print(f'Arbol generado para Operación {i}: {expr}')
 
 def operador(op):
     return {
@@ -64,7 +64,7 @@ def tipo_nodo(node):
         return operador(node.op)
     elif isinstance(node, ast.Num):
         return str(node.n)
-    elif isinstance(node, ast.Constant):  # Python 3.8+
+    elif isinstance(node, ast.Constant):
         return str(node.value)
     elif isinstance(node, ast.Expr):
         return tipo_nodo(node.value)
@@ -128,8 +128,8 @@ def GenerarResultados(lexico: Lexico) -> None:
             f.write(f"<p>{operaciones[i]} = {resultados[i]}</p>\n")
             f.write("</div>\n")
         f.write("</body>\n")
-    if __name__ == '__main__':
-        generar_diagramas('Resultados.html')
+    
+    generar_diagramas('Resultados.html')
 
 
 def GenerarReporteErrores(lexico: Lexico) -> None:
@@ -383,3 +383,4 @@ if __name__ == "__main__":
 
     # Ejecutar la interfaz
     ventana.mainloop()
+
