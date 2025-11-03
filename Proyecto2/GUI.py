@@ -4,6 +4,86 @@ from operaciones import *
 import os
 import tkinter as tk
 from tkinter import filedialog, messagebox
+import re
+import ast
+from bs4 import BeautifulSoup
+from graphviz import Digraph
+
+def extraer_expresiones(html_path):
+    with open(html_path, 'r', encoding='utf-8') as f:
+        soup = BeautifulSoup(f, 'html.parser')
+    expresiones = []
+    for p in soup.find_all('p'):
+        texto = p.get_text()
+        match = re.search(r'([\d\.\+\-\*/\^\(\)% ]+)=', texto)
+        if match:
+            expresiones.append(match.group(1).strip())
+    return expresiones
+
+def parsear_expresion(expr):
+    expr = expr.replace('^', '**')  # Python usa ** para potencia
+    try:
+        return ast.parse(expr, mode='eval').body
+    except Exception as e:
+        print(f"Error al parsear: {expr} → {e}")
+        return None
+
+def hijos_nodo(node):
+    if isinstance(node, ast.BinOp):
+        return [node.left, node.right]
+    elif isinstance(node, ast.UnaryOp):
+        return [node.operand]
+    elif isinstance(node, ast.Call):
+        return node.args
+    return []
+
+def generar_diagramas(html_path):
+    expresiones = extraer_expresiones(html_path)
+    for i, expr in enumerate(expresiones, start=1):
+        ast_root = parsear_expresion(expr)
+        dot = Digraph(comment=f'Operacion {i}')
+        dibujar_arbol_ast(ast_root, dot)
+        dot.render(f'arbol_operacion_{i}', format='png', cleanup=True)
+        print(f'✅ Árbol generado para Operación {i}: {expr}')
+
+def operador(op):
+    return {
+        ast.Add: 'Suma',
+        ast.Sub: 'Resta',
+        ast.Mult: 'Multiplicación',
+        ast.Div: 'División',
+        ast.Pow: 'Potencia',
+        ast.Mod: 'Módulo',
+        ast.USub: 'Negativo'
+    }.get(type(op), type(op).__name__)
+
+def tipo_nodo(node):
+    if isinstance(node, ast.BinOp):
+        return operador(node.op)
+    elif isinstance(node, ast.UnaryOp):
+        return operador(node.op)
+    elif isinstance(node, ast.Num):
+        return str(node.n)
+    elif isinstance(node, ast.Constant):  # Python 3.8+
+        return str(node.value)
+    elif isinstance(node, ast.Expr):
+        return tipo_nodo(node.value)
+    elif isinstance(node, ast.Call):
+        return 'función'
+    else:
+        return type(node).__name__
+
+def dibujar_arbol_ast(node, dot, parent=None):
+    if node is None:
+        return
+    label = tipo_nodo(node)
+    nodo_id = str(id(node))
+    dot.node(nodo_id, label)
+    if parent:
+        dot.edge(parent, nodo_id)
+
+    for hijo in hijos_nodo(node):
+        dibujar_arbol_ast(hijo, dot, nodo_id)
 
 def LeerArchivo(ruta: str) -> str:
     info = ""
@@ -48,6 +128,8 @@ def GenerarResultados(lexico: Lexico) -> None:
             f.write(f"<p>{operaciones[i]} = {resultados[i]}</p>\n")
             f.write("</div>\n")
         f.write("</body>\n")
+    if __name__ == '__main__':
+        generar_diagramas('Resultados.html')
 
 
 def GenerarReporteErrores(lexico: Lexico) -> None:
