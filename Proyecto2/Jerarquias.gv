@@ -1,0 +1,70 @@
+digraph Jerarquias {
+	subgraph Operacion0 {
+		raiz0 [label=SUMA]
+		numero0 [label=3.2]
+		raiz0 -> numero0
+		numero1 [label=7.8]
+		raiz0 -> numero1
+		numero2 [label=1]
+		raiz0 -> numero2
+	}
+	subgraph Operacion1 {
+		raiz1 [label=RESTA]
+		numero3 [label=50]
+		raiz1 -> numero3
+		numero4 [label=12.75]
+		raiz1 -> numero4
+		numero5 [label=0.5]
+		raiz1 -> numero5
+	}
+	subgraph Operacion2 {
+		raiz2 [label=MULTIPLICACION]
+		numero6 [label=6]
+		raiz2 -> numero6
+		numero7 [label=2.5]
+		raiz2 -> numero7
+		numero8 [label=3]
+		raiz2 -> numero8
+	}
+	subgraph Operacion3 {
+		raiz3 [label=DIVISION]
+		numero9 [label=81]
+		raiz3 -> numero9
+		numero10 [label=3]
+		raiz3 -> numero10
+	}
+	subgraph Operacion4 {
+		raiz4 [label=SUMA]
+		numero11 [label=1.5]
+		raiz4 -> numero11
+		numero12 [label=2.5]
+		raiz4 -> numero12
+		raiz5 -> raiz4
+		raiz5 [label=POTENCIA]
+		numero13 [label=3]
+		raiz5 -> numero13
+	}
+	subgraph Operacion5 {
+		raiz6 [label=MULTIPLICACION]
+		numero14 [label=4]
+		raiz6 -> numero14
+		numero15 [label=5]
+		raiz6 -> numero15
+		raiz7 -> raiz6
+		raiz7 [label=INVERSO]
+	}
+	subgraph Operacion6 {
+		raiz8 [label=MOD]
+		numero16 [label=58]
+		raiz8 -> numero16
+		numero17 [label=9]
+		raiz8 -> numero17
+	}
+	subgraph Operacion7 {
+		raiz9 [label=MOD]
+		numero18 [label=20]
+		raiz9 -> numero18
+		numero19 [label=2]
+		raiz9 -> numero19
+	}
+}
